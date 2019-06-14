@@ -13,6 +13,18 @@
 2. .env.example을 .env로 파일 이름 변경
 ```
 
+## 사용법
+
+```bash
+
+## server 실행
+
+yarn start
+
+npm start
+
+```
+
 ## etc
 
 - [node.js 기본 환경 구성](./etc/node-setting.md)
