@@ -1,23 +1,3 @@
-# nvm
+# cafe 24 node hosting 설정
 
-nvm(Node Version Manager)을 설치하여 node의 version을 관리할 수 있도록 합니다.
-
-## 설치
-
-- [on Window](https://github.com/coreybutler/nvm-windows)
-
-## 사용법
-
-```bash
-## node v8.5.0을 install
-nvm install v8.5.0
-
-## 설치 가능한 node version list
-nvm ls-remote
-
-## 설치 되어있는 node version list
-nvm ls
-
-## v8.5.0 version node 사용
-nvm use v8.5.0
-```
+node.js 호스팅은 일반적인 웹호스팅과는 달리 FTP 를 통한 파일 업로드를 지원하지 않습니다. 로컬 PC에서 작업한 결과물을 서버에 업로드 하려면 git를 이용하여 파일을 업로드 해야 합니다.
