@@ -1,0 +1,8 @@
+{
+  "name": "node-jwt-mysql",
+  "version": "1.0.0",
+  "main": "web.js",
+  "repository": "git@github.com-second:yogae/node-jwt-mysql.git",
+  "author": "kim jihyun",
+  "license": "MIT"
+}
