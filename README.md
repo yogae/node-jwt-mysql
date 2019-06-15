@@ -19,9 +19,11 @@
 
 ## server 실행
 
-yarn start
-
 npm start
+
+## dependency 설치
+
+npm install
 
 ```
 
