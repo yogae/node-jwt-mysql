@@ -4,11 +4,16 @@
   "main": "web.js",
   "repository": "git@github.com-second:yogae/node-jwt-mysql.git",
   "scripts": {
-    "start": "node web.js"
+    "start": "node web.js",
+    "test": "mocha ./routes/**/*.spec.js"
   },
   "author": "yogae",
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
   }
 }
