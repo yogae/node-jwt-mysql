@@ -4,9 +4,6 @@ services:
     image: mysql:5.7
     ports:
       - '3306:3306'
-    volumes:
-      - ./bin/create_table.sql:/root/bin/create_table.sql
-      - ./bin/create_table.sh:/root/bin/create_table.sh
     environment:
       - MYSQL_ROOT_PASSWORD=1234
       - MYSQL_DATABASE=test
