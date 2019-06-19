@@ -54,3 +54,15 @@ npm install
 
 ```
 
+## 사용 module
+
+- [express](https://expressjs.com/ko/)
+
+node 서버 framework입니다. node 서버 개발을 도와줍니다. 대중적으로 많이 사용되는 framework 입니다.
+
+- [Objection.js](https://vincit.github.io/objection.js/)
+
+MySQL DB query를 쉽게 만들수 있도록 합니다. Sequelize에 비하여 Objection.js은 사용하기 쉽고 유연하게 사용가능하다고 합니다.
+Sequelize보다는 reference가 많이 없지만 간단한 DB query를 만들기에는 Objection.js이 편할 것으로 보입니다.
+
+- [mocha & chai]()

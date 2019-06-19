@@ -3,7 +3,9 @@
 /**
  * Module dependencies.
  */
-
+const env = require('dotenv');
+env.config({ path: '.env.local' });
+const db = require('./models');
 const app = require('./app');
 const http = require('http');
 /**
@@ -16,11 +18,17 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
+const server = http.createServer(app);
+db.connect()
+  .then(() => {
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+  })
+  .catch((error) => {
+    console.error(error);
+  })
 
-var server = http.createServer(app);
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
 
 
 /**
