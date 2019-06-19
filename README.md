@@ -19,8 +19,10 @@ git remote add origin <위의 이미지에 있는 저장소에 적혀있는 주�
 2. .env.example 파일 수정
 
 ```
-ID="<cafe24 id>"
-PASSWORD="<cafe24 password>"
+DB_USER="<mysql user>"
+DB_HOST="<mysql host>"
+DB_PASSWORD="<mysql password>"
+DB_NAME="<database name>"
 ```
 
 3. .env.example을 .env로 파일 이름 변경
@@ -43,15 +45,20 @@ git push origin master
 ## 사용법
 
 ```bash
+## local MySQL 서버 구성
+docker-compose up
+
+## local MySQL 서버 제거
+docker-compose down
 
 ## server 실행
-
 npm start
 
 ## dependency 설치
-
 npm install
 
+## test code 실행
+npm run test
 ```
 
 ## 사용 module
