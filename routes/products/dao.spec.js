@@ -2,9 +2,12 @@ const env = require('dotenv');
 env.config({ path: '.env.local' });
 const dao = require('./dao');
 const db = require('../../models');
+const products = require('../../data/db.json').item;
 const chai = require('chai');
 
 describe('dao test', function () {
+    this.timeout(10000);
+    const docID = 1;
     before(async function () {
         await db.connect();
     })
@@ -14,8 +17,8 @@ describe('dao test', function () {
     })
 
     it('insert', async function () {
-        const res = await dao.insert();
-        console.log(res);
+        const data = products.find((elem) => elem.id === docID);
+        const res = await dao.insert(data);
     });
 
     it('getList', async function () {
@@ -24,7 +27,11 @@ describe('dao test', function () {
     });
 
     it('getById', async function () {
-        const res = await dao.getById(1);
+        const res = await dao.getById(docID);
         chai.expect(res.id).to.be.equals(1);
+    });
+
+    it('deleteById', async function () {
+        const res = await dao.deleteById(docID);
     });
 })

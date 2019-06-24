@@ -78,9 +78,10 @@ Sequelize보다는 reference가 많이 없지만 간단한 DB query를 만들기
 
 - 1주차
     - [x] cafe24 node hosting test
+    - [x] node server 기본 구성
     - [x] MySQL CRUD test 및 구현
 - 2주차
-    - [ ] DB schema 정의
+    - [x] DB schema 정의
     - [ ] JWT Token validation
 - 3주차
     - [ ] ftp 서버 연결 test

@@ -1,6 +1,5 @@
 const { Model } = require('objection');
 
-
 /**
  *
  *

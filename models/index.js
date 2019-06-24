@@ -38,12 +38,40 @@ async function connect () {
     // to do this. We create it here for simplicity.
     await knex.schema.createTable('users', table => {
         table.increments('id').primary();
-        table.string('firstName');
+        table.string('name');
+        table.string('email');
+        table.string('password');
+        table.string('hname');
+        table.string('htel');
+        table.string('lev');
     });
 
     await knex.schema.createTable('products', table => {
         table.increments('id').primary();
-        table.string('firstName');
+        table.string('pn');
+        table.string('des');
+        table.string('des1');
+        table.string('kdes');
+        table.integer('price');
+        table.string('p_date');
+        table.integer('lev');
+        table.string('category');
+        table.string('supn');
+        table.string('brand');
+        table.string('series');
+        table.string('keyword');
+        table.string('origin');
+        table.integer('psq');
+        table.integer('ofq0');
+        table.integer('ofq1');
+        table.string('deliv1');
+        table.integer('poq');
+        table.string('mstnote');
+        table.string('slnote');
+        table.string('img_ext');
+        table.string('pn_cat');
+        table.string('pn_a');
+        table.string('sspnt');
     });
 }
 
