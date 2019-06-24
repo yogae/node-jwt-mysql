@@ -1,6 +1,6 @@
 const express = require('express');
-const router = express.Router();
 const dao = require('./dao');
+const router = express.Router();
 
 router.post('/', function (req, res) {
     res.status(200).end();
