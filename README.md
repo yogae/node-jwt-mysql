@@ -73,3 +73,18 @@ MySQL DB query를 쉽게 만들수 있도록 합니다. Sequelize에 비하여 O
 Sequelize보다는 reference가 많이 없지만 간단한 DB query를 만들기에는 Objection.js이 편할 것으로 보입니다.
 
 - [mocha & chai]()
+
+## Task
+
+- 1주차
+    - [x] cafe24 node hosting test
+    - [x] MySQL CRUD test 및 구현
+- 2주차
+    - [ ] DB schema 정의
+    - [ ] JWT Token validation
+- 3주차
+    - [ ] ftp 서버 연결 test
+    - [ ] ftp로 file upload시 DB update 기능 구현
+- 4주차
+    - [ ] cafe24에 node server 배포
+    - [ ] 배포된 node server test
