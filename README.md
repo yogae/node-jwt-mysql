@@ -23,6 +23,7 @@ DB_USER="<mysql user>"
 DB_HOST="<mysql host>"
 DB_PASSWORD="<mysql password>"
 DB_NAME="<database name>"
+JWT_SECRET_KEY="<jwt token secret key>"
 ```
 
 3. .env.example을 .env로 파일 이름 변경
