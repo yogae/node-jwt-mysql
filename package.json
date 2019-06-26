@@ -5,20 +5,25 @@
   "repository": "git@github.com-second:yogae/node-jwt-mysql.git",
   "scripts": {
     "start": "node web.js",
-    "test": "mocha ./**/*.spec.js"
+    "test": "mocha ./routes/**/*.spec.js",
+    "unit-test": "mocha "
   },
   "author": "yogae",
   "license": "MIT",
   "dependencies": {
+    "JSONStream": "^1.3.5",
+    "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.17.6",
     "mysql2": "^1.6.5",
-    "objection": "^1.6.9"
+    "objection": "^1.6.9",
+    "promise-ftp": "^1.3.5"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "supertest": "^4.0.2"
   }
 }

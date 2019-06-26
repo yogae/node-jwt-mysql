@@ -1,11 +1,14 @@
 const { Model } = require('objection');
 const Knex = require('knex');
-// const User = require('./users');
-// const Product = require('./products');
+const User = require('./users');
+const Product = require('./products');
 const user = process.env.DB_USER;
 const dbUrl = process.env.DB_HOST;
 const password = process.env.DB_PASSWORD;
 const db = process.env.DB_NAME;
+
+const users = require('../data/users.json').users;
+const items = require('../data/db.json').items;
 
 let dbDestroyed = true;
 
@@ -31,7 +34,7 @@ async function connect () {
 
     // await dropTable();
     if (await knex.schema.hasTable('users') && await knex.schema.hasTable('products')) {
-      return;
+        return;
     }
   
     // Create database schema. You should use knex migration files
@@ -44,6 +47,7 @@ async function connect () {
         table.string('hname');
         table.string('htel');
         table.string('lev');
+        table.string('role');
     });
 
     await knex.schema.createTable('products', table => {
@@ -73,6 +77,9 @@ async function connect () {
         table.string('pn_a');
         table.string('sspnt');
     });
+
+    await Promise.all(users.map((user) => User.query().insert(user)));
+    await Promise.all(items.map((item) => Product.query().insert(item)));
 }
 
 async function close () {

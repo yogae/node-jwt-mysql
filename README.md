@@ -24,6 +24,9 @@ DB_HOST="<mysql host>"
 DB_PASSWORD="<mysql password>"
 DB_NAME="<database name>"
 JWT_SECRET_KEY="<jwt token secret key>"
+FTP_HOST="<ftp host>"
+FTP_USER="<ftp user>"
+FTP_PASSWORD="<ftp password>"
 ```
 
 3. .env.example을 .env로 파일 이름 변경
@@ -83,9 +86,9 @@ Sequelize보다는 reference가 많이 없지만 간단한 DB query를 만들기
     - [x] MySQL CRUD test 및 구현
 - 2주차
     - [x] DB schema 정의
-    - [ ] JWT Token validation
+    - [x] JWT Token validation
 - 3주차
-    - [ ] ftp 서버 연결 test
+    - [x] ftp 서버 연결 test
     - [ ] ftp로 file upload시 DB update 기능 구현
 - 4주차
     - [ ] cafe24에 node server 배포

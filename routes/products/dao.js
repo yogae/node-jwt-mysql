@@ -35,7 +35,6 @@ const Product = require('../../models/products');
  */
 class ProductDao {
     
-
     /**
      *
      *
@@ -75,6 +74,15 @@ class ProductDao {
      */
     async deleteById (id) {
         return Product.query().deleteById(id);
+    }
+
+    async updateDb (productJson) {
+        await Product.query().truncate();
+        const productUpdatePromises = productJson.map((product) => {
+            return Product.query().insert(product);
+        });
+        const result = await Promise.all(productUpdatePromises);
+        return result;
     }
 }
 

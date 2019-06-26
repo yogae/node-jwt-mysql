@@ -1,24 +1,36 @@
 const express = require('express');
 const dao = require('./dao');
 const router = express.Router();
+const jwt = require('../../lib/jwtToken');
+const ftp = require('../../lib/ftp');
 
-router.post('/', function (req, res) {
-    res.status(200).end();
+router.post('/', jwt.checkAuthHeader('admin'), async function (req, res) {
+    const product = req.body;
+    const result = await dao.insert(product);
+    res.status(201).json(result);
 });
 
-router.get('/', function (req, res) {
-    const data = dao.getList();
+router.post('/update', jwt.checkAuthHeader('admin'), async function (req, res) {
+    const dbObj = await ftp.getObjOnce('db.json');
+    const result = await dao.updateDb(dbObj.item);
+    res.status(200).json(result);
+});
+
+router.get('/', jwt.checkAuthHeader(['admin', 'guest']), async function (req, res) {
+    const data = await dao.getList();
     res.status(200).json(data);
 });
 
-router.get('/:id', function (req, res) {
+router.get('/:id', jwt.checkAuthHeader(['admin', 'guest']), async function (req, res) {
     const { id } = req.params;
-    const data = dao.getById(Number.parseInt(id));
+    const data = await dao.getById(Number.parseInt(id));
     res.status(200).json(data);
 });
 
-router.post('/', function (req, res) {
-    res.status(200).end();
+router.delete('/:id', jwt.checkAuthHeader('admin'), async function (req, res) {
+    const { id } = req.params;
+    const data = await dao.deleteById(Number.parseInt(id));
+    res.status(200).json(data);
 });
 
 module.exports = router;

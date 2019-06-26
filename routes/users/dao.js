@@ -8,6 +8,7 @@ const User = require('../../models/users');
  * @property {string} hname
  * @property {number} htel
  * @property {string} lev
+ * @property {string} role
  */
 
 /**
@@ -49,7 +50,20 @@ class UserDao {
         return User.query().findById(id);
     }
 
-        /**
+    
+    /**
+     *
+     *
+     * @param {string} name
+     * @param {string} password
+     * @returns
+     * @memberof UserDao
+     */
+    findUser (name, password) {
+        return User.query().findOne({ name, password});
+    }
+
+    /**
      *
      *
      * @param {string} id
@@ -57,6 +71,15 @@ class UserDao {
      */
     deleteById (id) {
         return User.query().deleteById(id);
+    }
+
+    async updateDb (userJson) {
+        await User.query().truncate();
+        const userUpdatePromises = userJson.map((user) => {
+            return User.query().insert(user);
+        });
+        const result = await Promise.all(userUpdatePromises);
+        return result;
     }
 }
 
