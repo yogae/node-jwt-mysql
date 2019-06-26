@@ -89,7 +89,7 @@ Sequelize보다는 reference가 많이 없지만 간단한 DB query를 만들기
     - [x] JWT Token validation
 - 3주차
     - [x] ftp 서버 연결 test
-    - [ ] ftp로 file upload시 DB update 기능 구현
+    - [x] ftp로 file upload시 DB update 기능 구현
 - 4주차
     - [ ] cafe24에 node server 배포
     - [ ] 배포된 node server test
