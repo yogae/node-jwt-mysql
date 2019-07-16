@@ -45,6 +45,7 @@ npm install
 ``` bash
 git add .
 git commit -m "<수정된 message 입력>"
+git push --set-upstream origin master
 git push origin master
 ```
 
