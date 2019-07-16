@@ -1,14 +1,12 @@
 const { Model } = require('objection');
 const Knex = require('knex');
-const User = require('./users');
-const Product = require('./products');
 const user = process.env.DB_USER;
 const dbUrl = process.env.DB_HOST;
 const password = process.env.DB_PASSWORD;
 const db = process.env.DB_NAME;
 
-const users = require('../data/users.json').users;
-const items = require('../data/db.json').items;
+// const users = require('../data/users.json').users;
+// const items = require('../data/db.json').items;
 
 let dbDestroyed = true;
 
@@ -78,8 +76,8 @@ async function connect () {
         table.string('sspnt');
     });
 
-    await Promise.all(users.map((user) => User.query().insert(user)));
-    await Promise.all(items.map((item) => Product.query().insert(item)));
+    // await Promise.all(users.map((user) => User.query().insert(user)));
+    // await Promise.all(items.map((item) => Product.query().insert(item)));
 }
 
 async function close () {

@@ -4,6 +4,8 @@ const router = express.Router();
 const jwt = require('../../lib/jwtToken');
 const ftp = require('../../lib/ftp');
 
+const dbJsonPath = process.env.FTP_DB_JSON_PATH;
+
 router.post('/', jwt.checkAuthHeader('admin'), async function (req, res) {
     const product = req.body;
     const result = await dao.insert(product);
@@ -11,7 +13,7 @@ router.post('/', jwt.checkAuthHeader('admin'), async function (req, res) {
 });
 
 router.post('/update', jwt.checkAuthHeader('admin'), async function (req, res) {
-    const dbObj = await ftp.getObjOnce('db.json');
+    const dbObj = await ftp.getObjOnce(dbJsonPath);
     const result = await dao.updateDb(dbObj.item);
     res.status(200).json(result);
 });

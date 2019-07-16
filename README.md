@@ -13,7 +13,7 @@ git clone https://github.com/yogae/node-jwt-mysql.git
 git remote remove origin
 
 # 아래의 명령은 "기본 설치 및 cafe24 구성" "cafe24 node.js hosting 구성하기" 5번 "cafe24 git 설정"에서 저정소의 주소를 입력하시면 됩니다.(입력 시 주소 앞에 있는 git이라는 단어는 빼고 입력합니다.)
-git remote add origin <위의 이미지에 있는 저장소에 적혀있는 주소 입력>
+git remote add origin "<cafe24 node hosting git 주소>"
 ``` 
 
 2. .env.example 파일 수정
@@ -27,6 +27,8 @@ JWT_SECRET_KEY="<jwt token secret key>"
 FTP_HOST="<ftp host>"
 FTP_USER="<ftp user>"
 FTP_PASSWORD="<ftp password>"
+FTP_DB_JSON_PATH="<ftp db.json path>"
+FTP_USER_JSON_PATH="<ftp user.json path>"
 ```
 
 3. .env.example을 .env로 파일 이름 변경
@@ -91,5 +93,5 @@ Sequelize보다는 reference가 많이 없지만 간단한 DB query를 만들기
     - [x] ftp 서버 연결 test
     - [x] ftp로 file upload시 DB update 기능 구현
 - 4주차
-    - [ ] cafe24에 node server 배포
-    - [ ] 배포된 node server test
+    - [x] cafe24에 node server 배포
+    - [x] 배포된 node server test

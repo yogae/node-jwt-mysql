@@ -10,6 +10,8 @@ const ftp = require('../../lib/ftp');
 //     res.status(201).json(result);
 // });
 
+const userJsonPath = process.env.FTP_USER_JSON_PATH;
+
 router.post('/login', async function (req, res) {
     const { name, password } = req.body;
     const user = await dao.getList(name, password);
@@ -24,7 +26,7 @@ router.post('/login', async function (req, res) {
 });
 
 router.post('/update', jwt.checkAuthHeader(['admin']), async function (req, res) {
-    const userObj = await ftp.getObjOnce('users.json');
+    const userObj = await ftp.getObjOnce(userJsonPath);
     const result = await dao.updateDb(userObj.users);
     res.status(200).json(result);
 });

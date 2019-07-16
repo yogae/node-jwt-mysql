@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 const env = require('dotenv');
-env.config({ path: '.env.local' });
+env.config({ path: '/home/hosting_users/whaler/apps/whaler_whaler/.env' });
 const db = require('./models');
 const app = require('./app');
 const http = require('http');
