@@ -16,7 +16,7 @@ const { fork } = require('child_process');
 var port = normalizePort(process.env.PORT || '8001');
 app.set('port', port);
 
-cron.schedule('*/10 * * * * *', () => {
+cron.schedule('*/10 * * * *', () => {
   console.log('child process start');
   const cp = fork(__dirname + '/dbUpdateTask.js');
   cp.on('exit', function (code) {
