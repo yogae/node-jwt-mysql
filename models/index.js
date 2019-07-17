@@ -90,6 +90,10 @@ async function dropTable () {
             .dropTableIfExists('products');
 }
 
+async function dbUpdate () {
+    
+}
+
 module.exports = {
     connect,
     close,

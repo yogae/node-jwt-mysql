@@ -1,19 +1,29 @@
-#!/usr/bin/env node
-
 /**
  * Module dependencies.
  */
 const env = require('dotenv');
-env.config({ path: '/home/hosting_users/whaler/apps/whaler_whaler/.env' });
+const cron = require('node-cron');
+// env.config({ path: '/home/hosting_users/whaler/apps/whaler_whaler/.env' });
+env.config({ path: __dirname + '/.env' });
 const db = require('./models');
 const app = require('./app');
 const http = require('http');
+const { fork } = require('child_process');
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '8001');
 app.set('port', port);
+
+cron.schedule('*/10 * * * * *', () => {
+  console.log('child process start');
+  const cp = fork(__dirname + '/dbUpdateTask.js');
+  cp.on('exit', function (code) {
+    console.log(`child process exit code:${code}`);
+  });
+});
+
 
 /**
  * Create HTTP server.
