@@ -15,10 +15,13 @@ app.use(bodyParser.urlencoded({extended: false}));
 //body-parser를 사용해 application/json 파싱
 app.use(bodyParser.json());
 
+// 서버 health check endpoint
 app.get('/health', function (req, res) {
     res.status(200).end();
 });
+// user 관련 routes
 app.use(`/users`, users);
+// products 관련 routes
 app.use(`/products`, products);
 
 // not found 404 error
@@ -33,6 +36,5 @@ app.use((err, req, res, next) => {
     const status = err.status || 500;
     return res.status(status).json(err.message);
 });
-
 
 module.exports = app;

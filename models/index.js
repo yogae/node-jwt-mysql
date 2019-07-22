@@ -31,12 +31,14 @@ async function connect () {
     }
 
     // await dropTable();
+    // 기존에 users나 products table이 있다면 table을 생성하지 않는다.
     if (await knex.schema.hasTable('users') && await knex.schema.hasTable('products')) {
         return;
     }
   
     // Create database schema. You should use knex migration files
     // to do this. We create it here for simplicity.
+    // users table 생성
     await knex.schema.createTable('users', table => {
         table.increments('id').primary();
         table.string('name');
@@ -48,6 +50,7 @@ async function connect () {
         table.string('role');
     });
 
+    // product table 생성
     await knex.schema.createTable('products', table => {
         table.increments('id').primary();
         table.string('pn');

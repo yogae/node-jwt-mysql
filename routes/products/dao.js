@@ -37,7 +37,7 @@ class ProductDao {
     
     /**
      *
-     *
+     * product 생성
      * @param {Product} product
      * @returns
      * @memberof ProductDao
@@ -48,7 +48,7 @@ class ProductDao {
 
     /**
      *
-     *
+     * product list 반환
      * @param {string} id
      * @memberof ProductDao
      */
@@ -58,7 +58,7 @@ class ProductDao {
 
     /**
      *
-     *
+     * id의 product 반환
      * @param {string} id
      * @memberof ProductDao
      */
@@ -68,7 +68,7 @@ class ProductDao {
 
     /**
      *
-     *
+     * id의 product 삭제
      * @param {string} id
      * @memberof ProductDao
      */
@@ -76,6 +76,14 @@ class ProductDao {
         return Product.query().deleteById(id);
     }
 
+
+    /**
+     *
+     * prodoct db update
+     * @param {*} productJson
+     * @returns
+     * @memberof ProductDao
+     */
     async updateDb (productJson) {
         await Product.query().truncate();
         const productUpdatePromises = productJson.map((product) => {

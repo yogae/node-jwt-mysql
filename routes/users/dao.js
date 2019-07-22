@@ -21,7 +21,7 @@ class UserDao {
 
     /**
      *
-     *
+     * user 생성
      * @param {User} user
      * @returns
      * @memberof UserDao
@@ -32,7 +32,7 @@ class UserDao {
 
     /**
      *
-     *
+     * user list 반환
      * @param {string} id
      * @memberof UserDao
      */
@@ -42,7 +42,7 @@ class UserDao {
 
     /**
      *
-     *
+     * id의 user 정보 반환
      * @param {string} id
      * @memberof UserDao
      */
@@ -53,19 +53,19 @@ class UserDao {
     
     /**
      *
-     *
+     * name과 password로 user 정보 반환
      * @param {string} name
      * @param {string} password
      * @returns
      * @memberof UserDao
      */
     findUser (name, password) {
-        return User.query().findOne({ name, password});
+        return User.query().findOne({ name, password });
     }
 
     /**
      *
-     *
+     * user 삭제
      * @param {string} id
      * @memberof UserDao
      */
@@ -73,6 +73,14 @@ class UserDao {
         return User.query().deleteById(id);
     }
 
+
+    /**
+     *
+     * user db update
+     * @param {*} userJson
+     * @returns
+     * @memberof UserDao
+     */
     async updateDb (userJson) {
         await User.query().truncate();
         const userUpdatePromises = userJson.map((user) => {

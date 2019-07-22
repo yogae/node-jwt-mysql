@@ -18,16 +18,26 @@ git remote add origin "<cafe24 node hosting git 주소>"
 
 2. .env.example 파일 수정
 
-```
+```bash
+# cafe24 db user name -> cafe24 id
 DB_USER="<mysql user>"
+# cafe24 db host
 DB_HOST="<mysql host>"
+# cafe24 db password
 DB_PASSWORD="<mysql password>"
+# cafe24 db name
 DB_NAME="<database name>"
+# JWT에 사용할 secret key -> jwt token을 encoding, decoding할 때 사용
 JWT_SECRET_KEY="<jwt token secret key>"
+# json file을 올린 FTP host
 FTP_HOST="<ftp host>"
+# FTP user
 FTP_USER="<ftp user>"
+# FTP password
 FTP_PASSWORD="<ftp password>"
+# FTP db.json path
 FTP_DB_JSON_PATH="<ftp db.json path>"
+# FTP users.json path
 FTP_USER_JSON_PATH="<ftp user.json path>"
 ```
 
@@ -49,6 +59,8 @@ git push --set-upstream origin master
 git push origin master
 ```
 
+> .env에 설정한 FTP_DB_JSON_PATH, FTP_USER_JSON_PATH에 user.json, db.json file을 upload하면 10분마다 ftp를 확인하여 update 합니다.
+
 ## 사용법
 
 ```bash
@@ -68,6 +80,18 @@ npm install
 npm run test
 ```
 
+### local test 방법
+
+```bash
+## 환경 구성
+docker-compose up
+
+## node app 실행
+npm start
+
+
+```
+
 ## 사용 module
 
 - [express](https://expressjs.com/ko/)
@@ -79,7 +103,18 @@ node 서버 framework입니다. node 서버 개발을 도와줍니다. 대중적
 MySQL DB query를 쉽게 만들수 있도록 합니다. Sequelize에 비하여 Objection.js은 사용하기 쉽고 유연하게 사용가능하다고 합니다.
 Sequelize보다는 reference가 많이 없지만 간단한 DB query를 만들기에는 Objection.js이 편할 것으로 보입니다.
 
-- [mocha & chai]()
+## directory 구조
+
+- lib: node app에서 사용할 module
+- models: db관련 model 관리
+- routes: api 경로 관련
+- .env: 환경 변수 저장
+- .gitignore: git commit에서 제외할 file 설정
+- app.js: express app
+- dbUpdateTask.js: 주기적으로 ftp에서 file을 확인하여 update하는 app
+- docker-compose.yaml: local에서 test환경 구성을 위한 docker 구성
+- package.json: node module 관리
+- web.js: entry point
 
 ## Task
 

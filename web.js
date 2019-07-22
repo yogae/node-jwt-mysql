@@ -16,9 +16,12 @@ const { fork } = require('child_process');
 var port = normalizePort(process.env.PORT || '8001');
 app.set('port', port);
 
+// 10분 마다 child process를 실행합니다.
 cron.schedule('*/10 * * * *', () => {
   console.log('child process start');
+  // dbUpdateTask.js 실행
   const cp = fork(__dirname + '/dbUpdateTask.js');
+  // dbUpdateTask.js를 실행한 process가 종료 되었을때 발생하는 event 등록
   cp.on('exit', function (code) {
     console.log(`child process exit code:${code}`);
   });
@@ -28,8 +31,11 @@ cron.schedule('*/10 * * * *', () => {
 /**
  * Create HTTP server.
  */
+// http 서버 생성
 const server = http.createServer(app);
-db.connect()
+// db 연결
+db.connect
+  // db 연결 성공 시 server 시작
   .then(() => {
     server.listen(port);
     server.on('error', onError);
