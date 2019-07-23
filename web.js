@@ -34,7 +34,7 @@ cron.schedule('*/10 * * * *', () => {
 // http 서버 생성
 const server = http.createServer(app);
 // db 연결
-db.connect
+db.connect()
   // db 연결 성공 시 server 시작
   .then(() => {
     server.listen(port);
