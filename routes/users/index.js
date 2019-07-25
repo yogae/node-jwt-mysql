@@ -16,7 +16,7 @@ const userJsonPath = process.env.FTP_USER_JSON_PATH;
 // token을 반환
 router.post('/login', async function (req, res) {
     const { name, password } = req.body;
-    const user = await dao.getList(name, password);
+    const user = await dao.findUser(name, password);
     if (user) {
         const token = jwt.getToken(name, 'admin', user.email);
         res.status(200).json({
