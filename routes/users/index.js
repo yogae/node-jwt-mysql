@@ -18,7 +18,7 @@ router.post('/login', async function (req, res) {
     const { name, password } = req.body;
     const user = await dao.findUser(name, password);
     if (user) {
-        const token = jwt.getToken(name, 'admin', user.email);
+        const token = jwt.getToken(name, user.role, user.email);
         res.status(200).json({
             accessToken: token,
         });
