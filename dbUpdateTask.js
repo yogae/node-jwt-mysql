@@ -84,11 +84,11 @@ async function getFtpFiles (user, product) {
     let resUser;
     let resProduct;
     if (user) {
-        const userDoc = await ftp.getObj(userJsonPath);
+        const userDoc = await ftp.getObj(userJsonPath, 'euc-kr');
         resUser = userDoc.users;
     }
     if (product) {
-        const productDoc = await ftp.getObj(dbJsonPath);
+        const productDoc = await ftp.getObj(dbJsonPath, 'euc-kr');
         resProduct = productDoc.item;
     }
     return {
