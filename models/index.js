@@ -23,7 +23,8 @@ async function connect () {
                 host : dbUrl,
                 user : user,
                 password : password,
-                database : db
+                database : db,
+                charset   : 'utf8',
             }
         });
         Model.knex(knex);
