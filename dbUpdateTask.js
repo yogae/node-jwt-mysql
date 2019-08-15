@@ -1,66 +1,67 @@
 const env = require('dotenv');
 // env.config({ path: '/home/hosting_users/whaler/apps/whaler_whaler/.env' });
-env.config({ path: __dirname + '/.env' });
+env.config({ path: `${__dirname}${process.env.NODE_ENV === 'local' ? '/.env.local' : '/.env'}`});
 const db = require('./models');
 const User = require('./models/users');
-const Product = require('./models/products');
+const lowdb = require('./lowdb');
+// const Product = require('./models/products');
 const ftp = require('./lib/ftp');
 const fs = require('fs');
 
 const dbJsonPath = process.env.FTP_DB_JSON_PATH;
 const userJsonPath = process.env.FTP_USER_JSON_PATH;
-const versionFilePath = process.env.VERSION_FILE_PATH || 'version';
-const versionPath = __dirname + `/${versionFilePath}`;
+const userVersionFilePath = process.env.USER_VERSION_FILE_PATH || 'version/user';
+const dbVersionFilePath = process.env.DB_VERSION_FILE_PATH || 'version/db';
 
 async function updateUserDb (userJson) {
+    await db.connect();
     await User.query().truncate();
     const userUpdatePromises = userJson.map((user) => {
         return User.query().insert(user);
     });
-    return await Promise.all(userUpdatePromises);
-}
-
-async function updateProductDb (productJson) {
-    await Product.query().truncate();
-    const productUpdatePromises = productJson.map((product) => {
-        return Product.query().insert(product);
-    });
-    return await Promise.all(productUpdatePromises);
-}
-
-async function dbUpdate (userDocs, producDocs) {
-    await db.connect();
-    // userDocs가 undefined가 아닌 경우 db update
-    if (userDocs) await updateUserDb(userDocs);
-    // producDocs가 undefined가 아닌 경우 db update
-    if (producDocs) await updateProductDb(producDocs);
+    const res = await Promise.all(userUpdatePromises);
     await db.close();
+    return res
+}
+
+async function updateProductDb (productJson, versionDate) {
+    lowdb.writeDbJson(productJson);
+    process.send(versionDate);
+}
+
+// async function updateProductDb (productJson) {
+//     await Product.query().truncate();
+//     const productUpdatePromises = productJson.map((product) => {
+//         return Product.query().insert(product);
+//     });
+//     return await Promise.all(productUpdatePromises);
+// }
+
+function versionFile (versionFilePath, ftpDate) {
+    let isNeedUpdate = false;
+    if (fs.existsSync(versionFilePath)) {
+        const versionStr = fs.readFileSync(versionFilePath).toString();
+        isNeedUpdate = ftpDate !== Number.parseInt(versionStr);
+    // version file이 없는 경우 update가 필요합니다.
+    } else {
+        isNeedUpdate = true;
+    }
+    return isNeedUpdate;
 }
 
 // version file을 확인하여 db update가 필요한지 확인
 // update가 필요한 경우 true 반환하며 user와 product를 따로 관리합니다.
-async function isNeedUpdate () {
-    let updateUser = false;
-    let updateDb = false;
+async function isNeedUpdate (ftpUserFilePath, ftpdbFilePath) {
     // ftp에서 db.json, users.json file의 수정시간을 가지고 옵니다.
-    const userModDate = await ftp.getModifyDate(userJsonPath);
-    const dbModDate = await ftp.getModifyDate(dbJsonPath);
+    const userModDate = await ftp.getModifyDate(ftpUserFilePath);
+    const dbModDate = await ftp.getModifyDate(ftpdbFilePath);
     // version file이 존재여부를 확인하고 있으면 수정시간을 확인합니다.
     // version file에 존재하는 수정시간이 ftp file의 수정시간과 같지 않은 경우 update가 필요합니다.
-    if (fs.existsSync(versionPath)) {
-        const versionStr = fs.readFileSync(versionPath);
-        const versionDoc = JSON.parse(versionStr);
-        updateUser = versionDoc.userDate !== userModDate;
-        updateDb = versionDoc.dbDate !== dbModDate;
-    // version file이 없는 경우 update가 필요합니다.
-    } else {
-        updateUser = true;
-        updateDb = true;
-    }
+    const needUpdateUser = versionFile(userVersionFilePath, userModDate);
+    const needUpdateDb = versionFile(dbVersionFilePath, dbModDate);
     return {
-        user: updateUser,
-        product: updateDb,
-        // 서정된 시간 반환
+        user: needUpdateUser,
+        product: needUpdateDb,
         versionDoc: {
             userDate: userModDate,
             dbDate: dbModDate,
@@ -69,31 +70,17 @@ async function isNeedUpdate () {
 }
 
 
-/**
- *
- * version file을 생성
- * @param {*} versionDoc
- */
-function updateVersionFile(versionDoc) {
-    console.log('version update');
-    fs.writeFileSync(versionPath, JSON.stringify(versionDoc));
-}
 
-
-async function getFtpFiles (user, product) {
-    let resUser;
-    let resProduct;
-    if (user) {
-        const userDoc = await ftp.getObj(userJsonPath, 'euc-kr');
-        resUser = userDoc.users;
-    }
-    if (product) {
-        const productDoc = await ftp.getObj(dbJsonPath, 'euc-kr');
-        resProduct = productDoc.item;
-    }
+function getFtpFiles (ftpUserFilePath, ftpdbFilePath) {
     return {
-        user: resUser,
-        product: resProduct
+        user: async function () {
+            const userDoc = await ftp.getObj(ftpUserFilePath, 'euc-kr');
+            return userDoc.users;
+        },
+        product: async function () {
+            const productDoc = await ftp.getObj(ftpdbFilePath, 'euc-kr');
+            return productDoc;
+        }
     }
 }
 
@@ -104,14 +91,22 @@ async function getFtpFiles (user, product) {
         // user => update가 필요한 경우 true 반환
         // product => update가 필요한 경우 true 반환
         // versionDoc => 수정 시간 반환
-        const { user, product, versionDoc } = await isNeedUpdate();
+        const { user, product, versionDoc } = await isNeedUpdate(userJsonPath, dbJsonPath);
         // 매개변수 user가 true인 경우 docs.user에 user.json 정보 반환, user가 false인 경우 docs.user undefined 반환
         // 매개변수 product가 true인 경우 docs.product에 product.json 정보 반환, , product가 false인 경우 docs.product undefined 반환
-        const docs = await getFtpFiles(user, product);
-        // docs.user, docs.product 중 undefined가 아닌 정보 update
-        await dbUpdate(docs.user, docs.product);
+        const ftpFile = getFtpFiles(userJsonPath, dbJsonPath);
+        if (user) {
+            const userData = await ftpFile.user();
+            await updateUserDb(userData);
+            fs.writeFileSync(userVersionFilePath, versionDoc.userDate);
+            console.log('user version update');
+        }
+
+        if (product) {
+            const productDocs = await ftpFile.product()
+            await updateProductDb(productDocs, versionDoc.dbDate);
+        }
         await ftp.close();
-        if (user || product) updateVersionFile(versionDoc);
     } catch (error) {
         // error 발생
         console.error('child process error:', error);

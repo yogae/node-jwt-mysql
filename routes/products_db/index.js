@@ -2,6 +2,9 @@ const express = require('express');
 const dao = require('./dao');
 const router = express.Router();
 const jwt = require('../../lib/jwtToken');
+const ftp = require('../../lib/ftp');
+
+const dbJsonPath = process.env.FTP_DB_JSON_PATH;
 
 // POST /<base url>/products
 // product 생성

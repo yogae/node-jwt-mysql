@@ -4,24 +4,49 @@
 const env = require('dotenv');
 const cron = require('node-cron');
 // env.config({ path: '/home/hosting_users/whaler/apps/whaler_whaler/.env' });
-env.config({ path: __dirname + '/.env' });
+env.config({ path: `${__dirname}${process.env.NODE_ENV === 'local' ? '/.env.local' : '/.env'}`});
 const db = require('./models');
 const app = require('./app');
 const http = require('http');
+const lowdb = require('./lowdb');
+const fs = require('fs');
+const ftp = require('./lib/ftp');
 const { fork } = require('child_process');
 /**
  * Get port from environment and store in Express.
  */
+const dbVersionFilePath = process.env.DB_VERSION_FILE_PATH || 'version/db';
 
 var port = normalizePort(process.env.PORT || '8001');
 app.set('port', port);
 
+const utfDBPath = 'data/utfDB.json';
+
+if (fs.existsSync(utfDBPath)) {
+  lowdb.changeDb();
+} else {
+  ftp.getObjOnce(ftpdbFilePath, 'euc-kr')
+    .then((productDoc) => {
+        return fs.writeFileSync(utfDBPath, JSON.stringify(productDoc));
+    })
+    .then(() => {
+      lowdb.changeDb();
+    });
+}
+
 // 10분 마다 child process를 실행합니다.
-cron.schedule('*/10 * * * *', () => {
+cron.schedule('*/10 * * * * *', () => {
   console.log('child process start');
   // dbUpdateTask.js 실행
   const cp = fork(__dirname + '/dbUpdateTask.js');
   // dbUpdateTask.js를 실행한 process가 종료 되었을때 발생하는 event 등록
+  cp.on('message', function (data) {
+    if (data) {
+      lowdb.changeDb();
+      fs.writeFileSync(dbVersionFilePath, data);
+      console.log('db version update');
+    }
+  })
   cp.on('exit', function (code) {
     console.log(`child process exit code:${code}`);
   });

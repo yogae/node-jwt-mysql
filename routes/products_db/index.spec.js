@@ -4,15 +4,41 @@ const db = require('../../models');
 const request = require('supertest');
 const app = require('../../app');
 const chai = require('chai');
-const jwt = require('../../lib/jwtToken');
+const fs = require('fs');
+const ftp = require('../../lib/ftp');
 
 let accessToken;
 let id;
 
 describe('test', function () {
+    before(async function () {
+        await db.connect();
+        await ftp.connect();
+        const dbBuffer = fs.readFileSync('data/db.json');
+        await ftp.putFile('db.json', dbBuffer);
+        await ftp.close();
+    })
 
-    it('login', function () {
-        accessToken = jwt.getToken('parkmoonsoo', 'admin', 'jihyun@gmail.com');
+    after(async function () {
+        await db.close();
+    })
+
+    it('login', function (done) {
+        request(app)
+            .post('/users/login')
+            .send({
+                name: "parkmoonsoo",
+                password: "234567890"
+            })
+            .expect(200)
+            .end((err, res) => {
+                if (err) throw err;
+                else {
+                    accessToken = res.body.accessToken;
+                    // console.log(accessToken);
+                    done();
+                }
+            })
     });
 
     it('create product', function (done) {
@@ -79,18 +105,18 @@ describe('test', function () {
             })
     });
 
-    // it('get user by id', function (done) {
-    //     request(app)
-    //         .post(`/products/update`)
-    //         .set({Authorization: accessToken})
-    //         .expect(200)
-    //         .end((err, res) => {
-    //             if (err) throw err;
-    //             else {
-    //                 const data = res.body;
-    //                 // console.log(data);
-    //                 done();
-    //             }
-    //         });
-    // });
+    it('get user by id', function (done) {
+        request(app)
+            .post(`/products/update`)
+            .set({Authorization: accessToken})
+            .expect(200)
+            .end((err, res) => {
+                if (err) throw err;
+                else {
+                    const data = res.body;
+                    // console.log(data);
+                    done();
+                }
+            });
+    });
 })

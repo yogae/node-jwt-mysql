@@ -1,5 +1,4 @@
-const lowdb = require('../../lowdb');
-// const Product = db.get('item');
+const Product = require('../../models/products');
 
 /**
  * @typedef Product
@@ -44,7 +43,7 @@ class ProductDao {
      * @memberof ProductDao
      */
     async insert (product) {
-        return lowdb.getDb().get('item').insert(product).write();
+        return Product.query().insert(product);
     }
 
     /**
@@ -54,7 +53,7 @@ class ProductDao {
      * @memberof ProductDao
      */
     async getList () {
-        return lowdb.getDb().get('item').value();
+        return Product.query();
     }
 
     /**
@@ -64,7 +63,7 @@ class ProductDao {
      * @memberof ProductDao
      */
     async getById (id) {
-        return lowdb.getDb().get('item').find({ id }).value();
+        return Product.query().findById(id);
     }
 
     /**
@@ -74,25 +73,25 @@ class ProductDao {
      * @memberof ProductDao
      */
     async deleteById (id) {
-        return lowdb.getDb().get('item').remove({ id }).write();
+        return Product.query().deleteById(id);
     }
 
 
-    // /**
-    //  *
-    //  * prodoct db update
-    //  * @param {*} productJson
-    //  * @returns
-    //  * @memberof ProductDao
-    //  */
-    // async updateDb (productJson) {
-    //     await Product.query().truncate();
-    //     const productUpdatePromises = productJson.map((product) => {
-    //         return Product.query().insert(product);
-    //     });
-    //     const result = await Promise.all(productUpdatePromises);
-    //     return result;
-    // }
+    /**
+     *
+     * prodoct db update
+     * @param {*} productJson
+     * @returns
+     * @memberof ProductDao
+     */
+    async updateDb (productJson) {
+        await Product.query().truncate();
+        const productUpdatePromises = productJson.map((product) => {
+            return Product.query().insert(product);
+        });
+        const result = await Promise.all(productUpdatePromises);
+        return result;
+    }
 }
 
 module.exports = new ProductDao();

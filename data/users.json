@@ -2,4 +2,5 @@
 {"id": 1,"name": "parkmoonsoo","email": "parkmoonsoo@daum.kr","password": "234567890","hname": "박문수","htel": "(010) 3344-5566","lev": "1"}
 ,{"id": 2,"name": "hinggildong","email": "hinggildong@daum.kr","password": "123456789","hname": "홍길동","htel": "","lev": "1"}
 ,{"id": 3,"name": "jungdojeon","email": "jungdojeon@daum.kr","password": "345678901","hname": "정도전","htel": "","lev": "1"}
+,{"id": 4,"name": "jungdojeon","email": "jungdojeon@daum.kr","password": "345678901","hname": "정도전","htel": "","lev": "1"}
 ]}
