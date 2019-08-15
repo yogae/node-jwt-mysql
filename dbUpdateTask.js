@@ -10,8 +10,8 @@ const fs = require('fs');
 
 const dbJsonPath = process.env.FTP_DB_JSON_PATH;
 const userJsonPath = process.env.FTP_USER_JSON_PATH;
-const userVersionFilePath = process.env.USER_VERSION_FILE_PATH || 'version/user';
-const dbVersionFilePath = process.env.DB_VERSION_FILE_PATH || 'version/db';
+const userVersionFilePath = `${__dirname}/${process.env.USER_VERSION_FILE_PATH || 'version/user'}`;
+const dbVersionFilePath = `${__dirname}/${process.env.DB_VERSION_FILE_PATH || 'version/db'}`;
 
 async function updateUserDb (userJson) {
     await db.connect();
@@ -53,8 +53,14 @@ function versionFile (versionFilePath, ftpDate) {
 // update가 필요한 경우 true 반환하며 user와 product를 따로 관리합니다.
 async function isNeedUpdate (ftpUserFilePath, ftpdbFilePath) {
     // ftp에서 db.json, users.json file의 수정시간을 가지고 옵니다.
-    const userModDate = await ftp.getModifyDate(ftpUserFilePath);
-    const dbModDate = await ftp.getModifyDate(ftpdbFilePath);
+    let userModDate;
+    let dbModDate;
+    try {
+        userModDate = await ftp.getModifyDate(ftpUserFilePath);
+        dbModDate = await ftp.getModifyDate(ftpdbFilePath);
+    } catch (error) {
+        throw new Error('cannot get ftp files');
+    }
     // version file이 존재여부를 확인하고 있으면 수정시간을 확인합니다.
     // version file에 존재하는 수정시간이 ftp file의 수정시간과 같지 않은 경우 update가 필요합니다.
     const needUpdateUser = versionFile(userVersionFilePath, userModDate);

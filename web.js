@@ -15,7 +15,7 @@ const { fork } = require('child_process');
 /**
  * Get port from environment and store in Express.
  */
-const dbVersionFilePath = process.env.DB_VERSION_FILE_PATH || 'version/db';
+const dbVersionFilePath = `${__dirname}/${process.env.DB_VERSION_FILE_PATH || 'version/db'}`;
 
 var port = normalizePort(process.env.PORT || '8001');
 app.set('port', port);
